@@ -1,37 +1,18 @@
-import readline from 'readline'
 import EventSource from 'eventsource'
-import { getRandomUsername } from './library/users.js'
+import consoleInterface from './library/consoleInterface.js'
+import { getRandomNickname } from './library/users.js'
+import { serverEvents } from './config/server-events.js'
+import backend from './apis/backend.js'
 
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
+const nickname = getRandomNickname()
+const endpoint = `http://localhost:4000/chat?nickname=${nickname}`
+const eventSource = new EventSource(endpoint)
 
-const username = getRandomUsername()
-
-const url = `http://localhost:4000/chat?username=${username}`;
-const eventSource = new EventSource(url)
+serverEvents(eventSource)
 
 
-
-eventSource.onmessage = (event) => {
-    const message = event.data;
-    console.log(message);
-}
-
-eventSource.onopen = () => {
-    console.log(`Conectado ao servidor SSE. Aguardando mensagens...`);
-}
-
-eventSource.onerror = (error) => {
-    console.log(error)
-    console.error(`SSE ERROR: ${error.message}`);
-}
-
-
-// Lidando com entrada do usuário
-rl.on('line', input => {
-    // Enviar mensagem ou fazer qualquer outra ação necessária
-});
+consoleInterface.on('line', message => {
+    backend.sendMessage({ nickname, message })
+})
 

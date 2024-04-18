@@ -1,5 +1,5 @@
-const getRandomUsername = () => {
-    const usernames = [
+const getRandomNickname = () => {
+    const nicknames = [
         'Pedrinho',
         'Jotinha',
         'David',
@@ -22,7 +22,7 @@ const getRandomUsername = () => {
         'Roberto'
     ]
 
-    return usernames[Math.floor(Math.random() * usernames.length)]
+    return nicknames[Math.floor(Math.random() * nicknames.length)]
 }
 
-export { getRandomUsername }
+export { getRandomNickname }
