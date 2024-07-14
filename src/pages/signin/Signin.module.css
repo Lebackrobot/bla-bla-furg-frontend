@@ -1,0 +1,11 @@
+.shadowMargin {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 1);
+}
+
+.background {
+    background-image: url('../../../public/images/student.jpg');
+    background-size: cover;
+    background-repeat: no-repeat; 
+    background-position: center center;
+    min-width: 30vw;
+}
