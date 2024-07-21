@@ -5,7 +5,6 @@ import SignContainer from "../../components/signContainer/SignContainer"
 const Signin = () => {
     return (
         <SignContainer>
-            {/* Header */}
             <center>
                 <img src='./images/bla-bla-icon.png' width='100' className='mb-4'></img>
                 <h3>Bla Bla Furg</h3>
