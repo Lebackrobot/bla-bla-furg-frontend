@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 import Signin from './pages/signin/Signin'
 import Signup from './pages/signin/signup/Signup';
+import Home from './pages/Home/Home';
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
       <Routes>
         <Route path='/signin' element={<Signin></Signin>}></Route>
         <Route path='/signup' element={<Signup></Signup>}></Route>
+        <Route path='/home'   element={<Home></Home>}></Route>
       </Routes>
     </Router>
   )

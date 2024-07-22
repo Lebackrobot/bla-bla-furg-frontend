@@ -14,7 +14,7 @@ const InputGroupStep3 = ({ signupForm }) => {
             window.localStorage.setItem('token', response.info.token)
 
             setTimeout(() => {
-                navigate('/')
+                navigate('/home')
             }, 3000)
         })
 

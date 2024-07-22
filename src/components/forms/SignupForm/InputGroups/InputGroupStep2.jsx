@@ -2,7 +2,6 @@ import { Button, Container, Form, FormText, InputGroup, Row, Col } from "react-b
 
 const InputGroupStep2 = ({ next, previus, signupForm }) => {
     const handleNextStep = () => {
-        // ... 
         next()
     }
 

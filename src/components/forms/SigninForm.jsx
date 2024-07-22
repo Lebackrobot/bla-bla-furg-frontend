@@ -15,6 +15,9 @@ const SigninForm = () => {
                 handleToastError(response.message)
                 return
             }
+
+            window.localStorage.setItem('token', response.info.token)
+            navigate('/home')
         })
     }
 
