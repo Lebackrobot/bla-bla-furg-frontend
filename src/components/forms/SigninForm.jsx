@@ -17,6 +17,8 @@ const SigninForm = () => {
             }
 
             window.localStorage.setItem('token', response.info.token)
+            window.localStorage.setItem('userId', response.info.userId)
+
             navigate('/home')
         })
     }

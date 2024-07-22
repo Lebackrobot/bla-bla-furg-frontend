@@ -1,7 +1,6 @@
 import { Button, Col, Nav, Navbar, Row } from "react-bootstrap"
 import styles from './Home.module.css'
 import HomeContainer from "../../components/HomeContainer/HomeContainer"
-import Channels from "../../components/Channels/ChannelList"
 import ChannelList from "../../components/Channels/ChannelList"
 import { useNavigate } from "react-router-dom"
 
@@ -13,7 +12,7 @@ const Home = () => {
         navigate('/signin')
     }
 
-    return ( 
+    return (
         <> 
             <Navbar bg="dark" data-bs-theme="dark" className='px-5'>
                 <Navbar.Brand href="#home">
