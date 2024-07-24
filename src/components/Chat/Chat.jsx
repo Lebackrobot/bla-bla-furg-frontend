@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Card, CardBody, CardFooter, CardHeader, Container, Form, InputGroup } from "react-bootstrap";
+import { Button, Card, CardBody, CardFooter, CardHeader, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import Message from "../Message/Message";
 import { useForm } from "react-hook-form";
 
@@ -25,6 +25,7 @@ const Chat = ({ chat}) => {
 
     return (
         <Card style={{ boxShadow: '0 0 2px rgba(0, 0, 0, 1)' }}>
+
             { chat &&
                 <CardHeader className='p-3' style={{ backgroundColor: '#212529', borderRadius: '5px', color: 'white'}}>
                     <h3> 
@@ -36,6 +37,20 @@ const Chat = ({ chat}) => {
             
             <CardBody>
                 <div style={{ position: "relative", height: "500px" }}>
+                    { !chat && 
+                        <Container fluid className="h-100 d-flex justify-content-center align-items-center" style={{ height: '100%' }}>
+                            <Row>
+                                <Col>
+                                    <div className="text-center">
+                                        <img src='./images/students.png' width='300'></img>
+                                        <h2> 💬 Bora bater um papo?</h2>
+                                        <span className='text-muted'>Conecte-se a um Grupo ao lado</span>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Container>
+                    }
+                    
                     {chat && 
                         <Container>
                             <Container>

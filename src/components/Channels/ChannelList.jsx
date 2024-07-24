@@ -35,7 +35,7 @@ const ChannelList = ({ setChat }) => {
                 <Container className='mt-3'>
                     <ListGroup>
                         {chats && chats.length != 0 && chats.map((chat, index) => (
-                            <ListGroupItem key={index} className='d-flex justify-content-between align-items-start' onClick={() => handleChat(chat)} variant='danger'>
+                            <ListGroupItem key={index} className='d-flex justify-content-between align-items-start' onClick={() => handleChat(chat)} variant='dark'>
                                 <div className="ms-2 me-auto">
                                     <div className="fw-bold">
                                         {chat.type === 'STUDY' && <strong> 📚 {chat.title} </strong>}
@@ -46,7 +46,7 @@ const ChannelList = ({ setChat }) => {
                                 </div>
 
                                 {chat.host === true && 
-                                    <Badge bg="danger" pill>
+                                    <Badge bg="dark" pill>
                                         HOST
                                     </Badge>
                                 }
