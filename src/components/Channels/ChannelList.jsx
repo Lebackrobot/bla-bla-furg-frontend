@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react"
-import { Badge, Button, Card, Container, ListGroup, ListGroupItem, Row } from "react-bootstrap"
+import { Badge, Button, Card, Container, ListGroup, ListGroupItem } from "react-bootstrap"
 import chatController from "../../controllers/chatController"
 
-const ChannelList = () => {
+const ChannelList = ({ setChat }) => {
     const [chats, setChats] = useState()
-    const [userId, setUserId] = useState(window.localStorage.getItem('userId'))
+
+    const handleChat = (chat) => {
+        setChat(chat)
+    }
 
     useEffect(() => {
         chatController.get().then(response => {
@@ -14,7 +17,7 @@ const ChannelList = () => {
 
             response.info.chats.forEach(chat => {
                 chat.users.forEach(user => {
-                    if (user.users_chats.role == 'HOST' && user.id == userId) {
+                    if (user.users_chats.role == 'HOST' && user.id == window.localStorage.getItem('userId')) {
                         chat.host = true
                     }
                 })
@@ -24,15 +27,15 @@ const ChannelList = () => {
 
 
         })
-    })
+    }, [])
 
     return (
         <>
-            <Card style={{ boxShadow: '0 0 2px rgba(0, 0, 0, 1)' }}>
+            <Card style={{ boxShadow: '0 0 2px rgba(0, 0, 0, 1)', minHeight: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <Container className='mt-3'>
                     <ListGroup>
                         {chats && chats.length != 0 && chats.map((chat, index) => (
-                            <ListGroupItem key={index} className='d-flex justify-content-between align-items-start'>
+                            <ListGroupItem key={index} className='d-flex justify-content-between align-items-start' onClick={() => handleChat(chat)} variant='danger'>
                                 <div className="ms-2 me-auto">
                                     <div className="fw-bold">
                                         {chat.type === 'STUDY' && <strong> 📚 {chat.title} </strong>}
@@ -43,17 +46,16 @@ const ChannelList = () => {
                                 </div>
 
                                 {chat.host === true && 
-                                    <Badge bg="primary" pill>
+                                    <Badge bg="danger" pill>
                                         HOST
                                     </Badge>
                                 }
-                               
                             </ListGroupItem>
                         ))}
                     </ListGroup>
                 </Container>
 
-                <Button variant='dark' className='mx-1 my-2'>
+                <Button variant='dark' className='mx-1 my-2 px-2'>
                     💬 Criar Canal
                 </Button>
             </Card>

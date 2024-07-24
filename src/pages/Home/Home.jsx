@@ -3,15 +3,20 @@ import styles from './Home.module.css'
 import HomeContainer from "../../components/HomeContainer/HomeContainer"
 import ChannelList from "../../components/Channels/ChannelList"
 import { useNavigate } from "react-router-dom"
+import Chat from "../../components/Chat/Chat"
+import { useState } from "react"
 
 const Home = () => {
     const navigate = useNavigate()
+
+    const [chat, setChat] = useState()
 
     const handleLogout = () => {
         window.localStorage.removeItem('token')
         navigate('/signin')
     }
 
+    
     return (
         <> 
             <Navbar bg="dark" data-bs-theme="dark" className='px-5'>
@@ -28,7 +33,11 @@ const Home = () => {
             <HomeContainer>
                 <Row>
                     <Col xs={3}>
-                        <ChannelList></ChannelList>
+                        <ChannelList setChat={setChat}></ChannelList>
+                    </Col>
+
+                    <Col>
+                        <Chat chat={chat}></Chat>
                     </Col>
 
                 </Row>
