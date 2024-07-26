@@ -1,18 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Card, CardBody, CardFooter, CardHeader, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import Message from "../Message/Message";
 import { useForm } from "react-hook-form";
+import messageController from "../../controllers/messageController";
 
-const Chat = ({ chat}) => {
+const Chat = ({ chat }) => {
     const messageForm = useForm()
     const [messages, setMessages] = useState([])
 
+    useEffect(() => {
+        const userId = parseInt(window.localStorage.getItem('userId'))
+        
+        if (chat) {
+            chat.messages.forEach(message => {
+                if (message.user_id === userId) {
+                    message.sender = 'me'
+                }
+            })
+
+            setMessages(chat.messages)
+        }
+    }, [chat])
+
     const handleMessage = () => {
-        const newMessage = messageForm.getValues('message')
-        if (newMessage) {
-            setMessages([...messages, { text: newMessage, sender: 'me', time: new Date().toLocaleTimeString() }])
+        const message = messageForm.getValues('message')
+        if (message) {
+            setMessages([...messages, { content: message, sender: 'me', createdAt: new Date().toLocaleTimeString() }])
             messageForm.reset()
             messageForm.setValue('message', '')
+
+            messageController.create({
+                chatId: chat.id,
+                content: message
+            })
         }
     }
 
@@ -55,7 +75,7 @@ const Chat = ({ chat}) => {
                         <Container>
                             <Container>
                                 {messages.map((msg, index) => (
-                                    <Message key={index} message={msg.text} sender={msg.sender} time={msg.time}></Message>
+                                    <Message key={index} message={msg.content} sender={msg.sender} time={msg.time}></Message>
                                 ))}
                             </Container>
                         </Container>

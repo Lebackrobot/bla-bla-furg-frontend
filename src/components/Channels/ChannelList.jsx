@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react"
 import { Badge, Button, Card, Container, ListGroup, ListGroupItem } from "react-bootstrap"
 import chatController from "../../controllers/chatController"
+import { setSubscriptionChannelModal, SubscriptionChannelModal } from "../Modals/SubscriptionChannelModal"
 
 const ChannelList = ({ setChat }) => {
     const [chats, setChats] = useState()
 
     const handleChat = (chat) => {
-        setChat(chat)
+        if (chat.host) {
+            return setChat(chat)
+        }
+
+        setSubscriptionChannelModal(chat)
     }
 
     useEffect(() => {
@@ -31,6 +36,8 @@ const ChannelList = ({ setChat }) => {
 
     return (
         <>
+            <SubscriptionChannelModal></SubscriptionChannelModal>
+
             <Card style={{ boxShadow: '0 0 2px rgba(0, 0, 0, 1)', minHeight: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <Container className='mt-3'>
                     <ListGroup>
