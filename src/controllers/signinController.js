@@ -45,6 +45,21 @@ const signController = {
             return error.response.data
 
         }
+    },
+
+    makeAvatarV2: async (seed) => {
+        try {
+            const url = `https://api.dicebear.com/9.x/adventurer/svg?seed=${seed}`
+            const response = await axios.get(url)
+            
+            return response.data
+        }
+
+        catch (error) {
+            console.error(error)
+            return error.response.data
+
+        }
     }
 }
 

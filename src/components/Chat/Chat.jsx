@@ -18,13 +18,21 @@ const Chat = ({ chat }) => {
         const userId = parseInt(window.localStorage.getItem('userId'))
 
         if (chat) {
-            chat.messages.forEach(message => {
-                if (message.user_id === userId) {
-                    message.sender = 'me'
+            messageController.getChatMessages(chat.id).then(response => {
+                if (response.success === false) {
+                    return
                 }
-            })
 
-            setMessages(chat.messages)
+                const messages = response.info.messages
+
+                messages.forEach(message => {
+                    if (message.user_id === userId) {
+                        message.sender = 'me'
+                    }
+                })
+
+                setMessages(messages)
+            })
 
             const token = window.localStorage.getItem('token')
             const eventSource = new EventSource(`${urlBase}/auth/event-stream?token=${token}`)
@@ -112,7 +120,7 @@ const Chat = ({ chat }) => {
                         <Container>
                             <Container>
                                 {messages.map((msg, index) => (
-                                    <Message key={index} message={msg.content} sender={msg.sender} time={msg.time}></Message>
+                                    <Message key={index} message={msg} sender={msg.sender} time={msg.time}></Message>
                                 ))}
                             </Container>
                         </Container>

@@ -49,7 +49,7 @@ const ChannelList = ({ setChat }) => {
                 <Container className='mt-3'>
                     <ListGroup>
                         {chats && chats.length != 0 && chats.map((chat, index) => (
-                            <ListGroupItem key={index} className='d-flex justify-content-between align-items-start' onClick={() => handleChat(chat)} variant='danger'>
+                            <ListGroupItem key={index} className='d-flex justify-content-between align-items-start mb-2' onClick={() => handleChat(chat)} variant='danger'>
                                 <div className="ms-2 me-auto">
                                     <div className="fw-bold">
                                         {chat.type === 'STUDY' && <strong> 📚 {chat.title} </strong>}

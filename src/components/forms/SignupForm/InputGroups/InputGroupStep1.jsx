@@ -20,7 +20,6 @@ const InputGroupStep1 = ({ next, previus, signupForm }) => {
 
     return (
         <Container className='my-5'>
-
             <Avatar avatar={avatar}></Avatar>
             <InputGroup>
                 <Button variant='primary' onClick={handleMakeAvatar} style={{minWidth: '100%'}}>

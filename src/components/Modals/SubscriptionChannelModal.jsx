@@ -16,8 +16,6 @@ const SubscriptionChannelModal = () => {
     const handleClose = () => setShow(false)
 
     const handleChannelRegister = () => {
-        
-
         handleClose()
     }
 
