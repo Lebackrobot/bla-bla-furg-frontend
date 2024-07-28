@@ -12,10 +12,17 @@ const SubscriptionChannelModal = () => {
         setChat(chatTarget)
         setShow(true)
     }
+    
+    const handleClose = () => setShow(false)
+
+    const handleChannelRegister = () => {
+        
+
+        handleClose()
+    }
 
     setSubscriptionChannelModal = handleSubscritionChannelModal 
 
-    const handleClose = () => setShow(false)
 
     return (
         <>
@@ -37,7 +44,7 @@ const SubscriptionChannelModal = () => {
                         <Button variant="secondary" onClick={handleClose}>
                             Não
                         </Button>
-                        <Button variant="primary" onClick={handleClose}>
+                        <Button variant="primary" onClick={handleChannelRegister}>
                             Sim
                         </Button>
                     </Modal.Footer>

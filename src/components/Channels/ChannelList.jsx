@@ -5,9 +5,16 @@ import { setSubscriptionChannelModal, SubscriptionChannelModal } from "../Modals
 
 const ChannelList = ({ setChat }) => {
     const [chats, setChats] = useState()
-
+    
     const handleChat = (chat) => {
+        const users = chat.users.map(user => user.id)
+        const user = parseInt(window.localStorage.getItem('userId'))
+
         if (chat.host) {
+            return setChat(chat)
+        }
+
+        if (users.includes(user)) {
             return setChat(chat)
         }
 
@@ -42,7 +49,7 @@ const ChannelList = ({ setChat }) => {
                 <Container className='mt-3'>
                     <ListGroup>
                         {chats && chats.length != 0 && chats.map((chat, index) => (
-                            <ListGroupItem key={index} className='d-flex justify-content-between align-items-start' onClick={() => handleChat(chat)} variant='dark'>
+                            <ListGroupItem key={index} className='d-flex justify-content-between align-items-start' onClick={() => handleChat(chat)} variant='danger'>
                                 <div className="ms-2 me-auto">
                                     <div className="fw-bold">
                                         {chat.type === 'STUDY' && <strong> 📚 {chat.title} </strong>}
@@ -53,7 +60,7 @@ const ChannelList = ({ setChat }) => {
                                 </div>
 
                                 {chat.host === true && 
-                                    <Badge bg="dark" pill>
+                                    <Badge bg="danger" pill>
                                         HOST
                                     </Badge>
                                 }

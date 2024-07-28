@@ -3,14 +3,20 @@ import { Button, Card, CardBody, CardFooter, CardHeader, Col, Container, Form, I
 import Message from "../Message/Message";
 import { useForm } from "react-hook-form";
 import messageController from "../../controllers/messageController";
+import { urlBase } from "../../configs/axiosConfig";
+
 
 const Chat = ({ chat }) => {
     const messageForm = useForm()
     const [messages, setMessages] = useState([])
 
     useEffect(() => {
+        loadChat()
+    }, [chat])
+
+    const loadChat = () => {
         const userId = parseInt(window.localStorage.getItem('userId'))
-        
+
         if (chat) {
             chat.messages.forEach(message => {
                 if (message.user_id === userId) {
@@ -19,8 +25,39 @@ const Chat = ({ chat }) => {
             })
 
             setMessages(chat.messages)
+
+            const token = window.localStorage.getItem('token')
+            const eventSource = new EventSource(`${urlBase}/auth/event-stream?token=${token}`)
+
+            eventSource.onmessage = (event) => {
+                if (chat) {
+                    messageController.getChatMessages(chat.id).then(response => {
+                        if (response.success === false) {
+                            return
+                        }
+
+                        const messages = response.info.messages
+
+                        messages.forEach(message => {
+                            if (message.user_id === userId) {
+                                message.sender = 'me'
+                            }
+                        })
+
+                        setMessages(messages)
+                    })
+                }
+            }
+
+            eventSource.onopen = () => {
+                console.log(`Connected to server SSE. Waiting for messages...`);
+            }
+
+            eventSource.onerror = (error) => {
+                console.error(`SSE ERROR: ${error.message}`)
+            }
         }
-    }, [chat])
+    }
 
     const handleMessage = () => {
         const message = messageForm.getValues('message')

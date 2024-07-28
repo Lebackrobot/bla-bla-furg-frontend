@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { header, urlBase } from '../configs/axiosConfig'
+import { urlBase } from '../configs/axiosConfig'
 
 const chatController = {
     get: async () => {
@@ -15,6 +15,11 @@ const chatController = {
             return error.response.data
 
         }
+    },
+
+
+    chatRegister: async (chatId) => {
+        // ...
     }
 }
 
