@@ -1,11 +1,11 @@
 import axios from 'axios'
-import { header, urlBase } from '../configs/axiosConfig'
+import { headers, urlBase } from '../configs/axiosConfig'
 
 const signController = {
     signin: async (payload) => {
         try {
             const url = `${urlBase}/noauth/signin`
-            const response = await axios.post(url, payload, header)
+            const response = await axios.post(url, payload, headers)
             return response.data
 
         }
@@ -20,7 +20,7 @@ const signController = {
     signup: async (payload) => {
         try {
             const url = `${urlBase}/noauth/signup`
-            const response = await axios.post(url, payload, header)
+            const response = await axios.post(url, payload, headers)
             return response.data
         }
 
@@ -35,6 +35,7 @@ const signController = {
         try {
             const url = `${urlBase}/noauth/signup/make-avatar`
             const response = await axios.get(url)
+
             return response.data
 
         }
