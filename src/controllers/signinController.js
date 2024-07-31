@@ -1,11 +1,11 @@
 import axios from 'axios'
-import { header, urlBase } from '../configs/axiosConfig'
+import { headers, urlBase } from '../configs/axiosConfig'
 
 const signController = {
     signin: async (payload) => {
         try {
             const url = `${urlBase}/noauth/signin`
-            const response = await axios.post(url, payload, header)
+            const response = await axios.post(url, payload, headers)
             return response.data
 
         }
@@ -20,7 +20,7 @@ const signController = {
     signup: async (payload) => {
         try {
             const url = `${urlBase}/noauth/signup`
-            const response = await axios.post(url, payload, header)
+            const response = await axios.post(url, payload, headers)
             return response.data
         }
 
@@ -35,8 +35,24 @@ const signController = {
         try {
             const url = `${urlBase}/noauth/signup/make-avatar`
             const response = await axios.get(url)
+
             return response.data
 
+        }
+
+        catch (error) {
+            console.error(error)
+            return error.response.data
+
+        }
+    },
+
+    makeAvatarV2: async (seed) => {
+        try {
+            const url = `https://api.dicebear.com/9.x/adventurer/svg?seed=${seed}`
+            const response = await axios.get(url)
+            
+            return response.data
         }
 
         catch (error) {

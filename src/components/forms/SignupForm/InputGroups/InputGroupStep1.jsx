@@ -8,8 +8,10 @@ const InputGroupStep1 = ({ next, previus, signupForm }) => {
 
     const handleMakeAvatar = () => {
         signController.makeAvatar().then(response => {
-            setAvatar(response.avatar)
-            signupForm.setValue('avatar', response.avatar)
+
+            console.log(response)
+            setAvatar(response.info.avatar)
+            signupForm.setValue('avatar', response.info.name)
         })
     }
 
@@ -20,7 +22,6 @@ const InputGroupStep1 = ({ next, previus, signupForm }) => {
 
     return (
         <Container className='my-5'>
-
             <Avatar avatar={avatar}></Avatar>
             <InputGroup>
                 <Button variant='primary' onClick={handleMakeAvatar} style={{minWidth: '100%'}}>

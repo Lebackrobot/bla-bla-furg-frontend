@@ -1,4 +1,7 @@
 const urlBase = 'http://localhost:4000'
-const header = { 'Content-Type': 'application/json'}
+const headers = { 
+    'Content-Type': 'application/json', 
+    'Authorization': `${window.localStorage.getItem('token')}`
+}
 
-export { header, urlBase }
+export { headers, urlBase }

@@ -15,6 +15,11 @@ const SigninForm = () => {
                 handleToastError(response.message)
                 return
             }
+
+            window.localStorage.setItem('token', response.info.token)
+            window.localStorage.setItem('userId', response.info.userId)
+
+            window.location.href = '/home'
         })
     }
 

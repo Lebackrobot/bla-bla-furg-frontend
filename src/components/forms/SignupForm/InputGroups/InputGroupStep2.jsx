@@ -2,7 +2,6 @@ import { Button, Container, Form, FormText, InputGroup, Row, Col } from "react-b
 
 const InputGroupStep2 = ({ next, previus, signupForm }) => {
     const handleNextStep = () => {
-        // ... 
         next()
     }
 
@@ -16,7 +15,7 @@ const InputGroupStep2 = ({ next, previus, signupForm }) => {
 
             <InputGroup className='mt-4'>
                 <InputGroup.Text>Senha</InputGroup.Text>
-                <Form.Control placeholder='' {...signupForm.register('password')}></Form.Control>
+                <Form.Control type='password' placeholder='' {...signupForm.register('password')}></Form.Control>
             </InputGroup>
 
             <Row className='mt-3'>
