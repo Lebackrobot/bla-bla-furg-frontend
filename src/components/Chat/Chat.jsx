@@ -4,9 +4,11 @@ import Message from "../Message/Message";
 import { useForm } from "react-hook-form";
 import messageController from "../../controllers/messageController";
 import { urlBase } from "../../configs/axiosConfig";
+import moment from "moment";
+import signController from "../../controllers/signinController";
 
 
-const Chat = ({ chat }) => {
+const Chat = ({ chat, eventSource }) => {
     const messageForm = useForm()
     const [messages, setMessages] = useState([])
 
@@ -29,16 +31,23 @@ const Chat = ({ chat }) => {
                     if (message.user_id === userId) {
                         message.sender = 'me'
                     }
+
+                    else {
+                        signController.makeAvatarV2(message.user.avatar).then(response => {
+                            const blob = new Blob([response], { type: 'image/svg+xml' })
+                            message.avatar = URL.createObjectURL(blob)
+                        })
+                    }
+
                 })
 
                 setMessages(messages)
             })
 
-            const token = window.localStorage.getItem('token')
-            const eventSource = new EventSource(`${urlBase}/auth/event-stream?token=${token}`)
-
             eventSource.onmessage = (event) => {
-                if (chat) {
+                const { chatId } = JSON.parse(event.data)
+
+                if (chat && chat.id == chatId) {
                     messageController.getChatMessages(chat.id).then(response => {
                         if (response.success === false) {
                             return
@@ -49,6 +58,14 @@ const Chat = ({ chat }) => {
                         messages.forEach(message => {
                             if (message.user_id === userId) {
                                 message.sender = 'me'
+                            }
+
+                            else {
+                                signController.makeAvatarV2(message.user.avatar).then(response => {
+                                    const blob = new Blob([response], { type: 'image/svg+xml' })
+                                    message.avatar = URL.createObjectURL(blob)
+                                })
+
                             }
                         })
 
@@ -70,7 +87,7 @@ const Chat = ({ chat }) => {
     const handleMessage = () => {
         const message = messageForm.getValues('message')
         if (message) {
-            setMessages([...messages, { content: message, sender: 'me', createdAt: new Date().toLocaleTimeString() }])
+            setMessages([{ content: message, sender: 'me', createdAt: moment() }, ...messages])
             messageForm.reset()
             messageForm.setValue('message', '')
 
@@ -102,12 +119,12 @@ const Chat = ({ chat }) => {
             
             <CardBody>
                 <div style={{ position: "relative", height: "500px" }}>
-                    { !chat && 
+                    {!chat &&
                         <Container fluid className="h-100 d-flex justify-content-center align-items-center" style={{ height: '100%' }}>
                             <Row>
                                 <Col>
                                     <div className="text-center">
-                                        <img src='./images/students.png' width='300'></img>
+                                        <img src='./images/students.png' width='300' alt="Students" />
                                         <h2> 💬 Bora bater um papo?</h2>
                                         <span className='text-muted'>Conecte-se a um Grupo ao lado</span>
                                     </div>
@@ -115,10 +132,10 @@ const Chat = ({ chat }) => {
                             </Row>
                         </Container>
                     }
-                    
-                    {chat && 
-                        <Container>
-                            <Container>
+
+                    {chat &&
+                        <Container style={{ height: '100%', maxHeight: 'calc(100% - 0px)', overflowY: 'auto' }}>
+                            <Container style={{ display: 'flex', flexDirection: 'column-reverse' }}>
                                 {messages.map((msg, index) => (
                                     <Message key={index} message={msg} sender={msg.sender} time={msg.time}></Message>
                                 ))}

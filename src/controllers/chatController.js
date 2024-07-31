@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { urlBase } from '../configs/axiosConfig'
+import { urlBase, headers } from '../configs/axiosConfig'
 
 const chatController = {
     get: async () => {
@@ -18,9 +18,23 @@ const chatController = {
     },
 
 
-    chatRegister: async (chatId) => {
-        // ...
-    }
+    addMember: async (payload) => {
+        try {
+            const url = `${urlBase}/auth/chats/member`
+            const response = await axios.post(url, payload, {
+                headers: {
+                    ...headers,
+                    authorization: window.localStorage.getItem('token')
+                }
+            })
+            return response.data
+        }
+
+        catch (error) {
+            console.error(error)
+            return error.response.data
+        }
+    },
 }
 
 export default chatController

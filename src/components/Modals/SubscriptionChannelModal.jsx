@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Button, Modal } from "react-bootstrap"
+import chatController from "../../controllers/chatController"
 
 let setSubscriptionChannelModal
 
@@ -16,7 +17,16 @@ const SubscriptionChannelModal = () => {
     const handleClose = () => setShow(false)
 
     const handleChannelRegister = () => {
+        chatController.addMember({ chatId: chat.id }).then(response => {
+            if (response.success === false) {
+                return
+            }
+
+            window.location.reload()    
+        })
+        
         handleClose()
+
     }
 
     setSubscriptionChannelModal = handleSubscritionChannelModal 

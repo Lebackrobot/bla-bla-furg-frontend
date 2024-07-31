@@ -8,6 +8,8 @@ const InputGroupStep1 = ({ next, previus, signupForm }) => {
 
     const handleMakeAvatar = () => {
         signController.makeAvatar().then(response => {
+
+            console.log(response)
             setAvatar(response.info.avatar)
             signupForm.setValue('avatar', response.info.name)
         })

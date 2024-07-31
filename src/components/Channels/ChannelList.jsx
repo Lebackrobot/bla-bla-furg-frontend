@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react"
-import { Badge, Button, Card, Container, ListGroup, ListGroupItem } from "react-bootstrap"
+import { Badge, Button, Card, Col, Container, ListGroup, ListGroupItem, Row } from "react-bootstrap"
 import chatController from "../../controllers/chatController"
 import { setSubscriptionChannelModal, SubscriptionChannelModal } from "../Modals/SubscriptionChannelModal"
+
+import styles from './ChannelList.module.css'
 
 const ChannelList = ({ setChat }) => {
     const [chats, setChats] = useState()
@@ -21,7 +23,16 @@ const ChannelList = ({ setChat }) => {
         setSubscriptionChannelModal(chat)
     }
 
+
+    const handleChatVariant = (chatType) => {
+        if (chatType == 'STUDY') return 'danger'
+        if (chatType == 'NOTIFY') return 'warning'
+        if (chatType == 'FUN') return 'success'
+    }
+
     useEffect(() => {
+        const userId = window.localStorage.getItem('userId')
+
         chatController.get().then(response => {
             if (response.success === false) {
                 return
@@ -29,8 +40,12 @@ const ChannelList = ({ setChat }) => {
 
             response.info.chats.forEach(chat => {
                 chat.users.forEach(user => {
-                    if (user.users_chats.role == 'HOST' && user.id == window.localStorage.getItem('userId')) {
+                    if (user.users_chats.role == 'HOST' && user.id == userId) {
                         chat.host = true
+                    }
+
+                    else if (user.users_chats.role == 'MEMBER' && user.id == userId) {
+                        chat.member = true
                     }
                 })
             })
@@ -49,9 +64,9 @@ const ChannelList = ({ setChat }) => {
                 <Container className='mt-3'>
                     <ListGroup>
                         {chats && chats.length != 0 && chats.map((chat, index) => (
-                            <ListGroupItem key={index} className='d-flex justify-content-between align-items-start mb-2' onClick={() => handleChat(chat)} variant='danger'>
+                            <ListGroupItem key={index} className={`mb-3 d-flex justify-content-between align-items-start mb-1 p-3 ${styles.channelListItem}`} onClick={() => handleChat(chat)} variant={handleChatVariant(chat.type)} style={{cursor: 'pointer'}}>
                                 <div className="ms-2 me-auto">
-                                    <div className="fw-bold">
+                                    <div>
                                         {chat.type === 'STUDY' && <strong> 📚 {chat.title} </strong>}
                                         {chat.type === 'NOTIFY' && <strong> 🔔 {chat.title} </strong>}
                                         {chat.type === 'FUN' && <strong> 👽 {chat.title} </strong>}
@@ -60,10 +75,16 @@ const ChannelList = ({ setChat }) => {
                                 </div>
 
                                 {chat.host === true && 
-                                    <Badge bg="danger" pill>
+                                    <Badge bg={handleChatVariant(chat.type)} pill>
                                         HOST
                                     </Badge>
                                 }
+                                {chat.member === true && 
+                                    <Badge bg={handleChatVariant(chat.type)} pill>
+                                        MEMBER
+                                    </Badge>
+                                }
+                                
                             </ListGroupItem>
                         ))}
                     </ListGroup>

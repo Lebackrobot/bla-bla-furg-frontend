@@ -1,0 +1,8 @@
+.channelListItem {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.channelListItem:hover {
+    filter: brightness(0.98);
+    transform: scale(1.05);
+}
