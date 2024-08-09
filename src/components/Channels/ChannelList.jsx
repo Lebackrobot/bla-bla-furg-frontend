@@ -38,11 +38,7 @@ const ChannelList = ({ setChat }) => {
                 return
             }
 
-            console.log(response.info.rooms)
-
             response.info.rooms.forEach(chat => {
-                console.log(chat)
-
                 chat.members.forEach(member => {
                     if (member.role == 'HOST' && member.id == userId) {
                         chat.host = true
