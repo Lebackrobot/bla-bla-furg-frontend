@@ -4,7 +4,7 @@ import { urlBase, headers } from '../configs/axiosConfig'
 const chatController = {
     get: async () => {
         try {
-            const url = `${urlBase}/noauth/chats`
+            const url = `${urlBase}/noauth/rooms`
             const response = await axios.get(url)
             return response.data
 
@@ -20,7 +20,7 @@ const chatController = {
 
     addMember: async (payload) => {
         try {
-            const url = `${urlBase}/auth/chats/member`
+            const url = `${urlBase}/auth/rooms/member`
             const response = await axios.post(url, payload, {
                 headers: {
                     ...headers,

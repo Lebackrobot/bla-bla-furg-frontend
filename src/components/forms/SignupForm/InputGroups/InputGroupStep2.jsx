@@ -9,8 +9,8 @@ const InputGroupStep2 = ({ next, previus, signupForm }) => {
     return (
         <Container className='my-5'>
             <InputGroup className='mt-4'>
-                <InputGroup.Text>Email</InputGroup.Text>
-                <Form.Control placeholder='' {...signupForm.register('email')}></Form.Control>
+                <InputGroup.Text>Nickname</InputGroup.Text>
+                <Form.Control disabled={true}  placeholder='' {...signupForm.register('nickname')}></Form.Control>
             </InputGroup>
 
             <InputGroup className='mt-4'>

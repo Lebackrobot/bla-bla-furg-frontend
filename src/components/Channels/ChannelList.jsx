@@ -9,14 +9,14 @@ const ChannelList = ({ setChat }) => {
     const [chats, setChats] = useState()
     
     const handleChat = (chat) => {
-        const users = chat.users.map(user => user.id)
-        const user = parseInt(window.localStorage.getItem('userId'))
+        const users = chat.members.map(member => member.id)
+        const member = parseInt(window.localStorage.getItem('userId'))
 
         if (chat.host) {
             return setChat(chat)
         }
 
-        if (users.includes(user)) {
+        if (users.includes(member)) {
             return setChat(chat)
         }
 
@@ -27,7 +27,7 @@ const ChannelList = ({ setChat }) => {
     const handleChatVariant = (chatType) => {
         if (chatType == 'STUDY') return 'danger'
         if (chatType == 'NOTIFY') return 'warning'
-        if (chatType == 'FUN') return 'success'
+        if (chatType == 'RANDOM') return 'success'
     }
 
     useEffect(() => {
@@ -38,19 +38,23 @@ const ChannelList = ({ setChat }) => {
                 return
             }
 
-            response.info.chats.forEach(chat => {
-                chat.users.forEach(user => {
-                    if (user.users_chats.role == 'HOST' && user.id == userId) {
+            console.log(response.info.rooms)
+
+            response.info.rooms.forEach(chat => {
+                console.log(chat)
+
+                chat.members.forEach(member => {
+                    if (member.role == 'HOST' && member.id == userId) {
                         chat.host = true
                     }
 
-                    else if (user.users_chats.role == 'MEMBER' && user.id == userId) {
+                    else if (member.role == 'MEMBER' && member.id == userId) {
                         chat.member = true
                     }
                 })
             })
 
-            setChats(response.info.chats)
+            setChats(response.info.rooms)
 
 
         })
@@ -67,9 +71,9 @@ const ChannelList = ({ setChat }) => {
                             <ListGroupItem key={index} className={`mb-3 d-flex justify-content-between align-items-start mb-1 p-3 ${styles.channelListItem}`} onClick={() => handleChat(chat)} variant={handleChatVariant(chat.type)} style={{cursor: 'pointer'}}>
                                 <div className="ms-2 me-auto">
                                     <div>
-                                        {chat.type === 'STUDY' && <strong> 📚 {chat.title} </strong>}
-                                        {chat.type === 'NOTIFY' && <strong> 🔔 {chat.title} </strong>}
-                                        {chat.type === 'FUN' && <strong> 👽 {chat.title} </strong>}
+                                        {chat.type === 'STUDY' && <strong>  📚  {chat.name} </strong>}
+                                        {chat.type === 'NOTIFY' && <strong> 🔔 {chat.name} </strong>}
+                                        {chat.type === 'RANDOM' && <strong> 👽 {chat.name} </strong>}
                                     </div>
                                     <span className='text-muted' style={{ fontSize: '14px' }}> {chat.description} </span>
                                 </div>
