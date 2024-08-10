@@ -9,15 +9,15 @@ const SubscriptionChannelModal = () => {
     const [chat, setChat] = useState()
 
     
-    const handleSubscritionChannelModal = (chatTarget) => {
-        setChat(chatTarget)
+    const handleSubscritionChannelModal = (roomTarget) => {
+        setChat(roomTarget)
         setShow(true)
     }
     
     const handleClose = () => setShow(false)
 
     const handleChannelRegister = () => {
-        chatController.addMember({ chatId: chat.id }).then(response => {
+        chatController.addMember({ roomId: chat.id }).then(response => {
             if (response.success === false) {
                 return
             }

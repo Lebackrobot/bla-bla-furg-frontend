@@ -5,29 +5,29 @@ import { setSubscriptionChannelModal, SubscriptionChannelModal } from "../Modals
 
 import styles from './ChannelList.module.css'
 
-const ChannelList = ({ setChat }) => {
-    const [chats, setChats] = useState()
-    
-    const handleChat = (chat) => {
-        const users = chat.members.map(member => member.id)
-        const member = parseInt(window.localStorage.getItem('userId'))
+const ChannelList = ({ setRoom }) => {
+    const [rooms, setRooms] = useState()
 
-        if (chat.host) {
-            return setChat(chat)
+    const handleChat = (room) => {
+        const members = room.members.map(member => member.userId)
+        const user = parseInt(window.localStorage.getItem('userId'))
+
+        if (room.host) {
+            return setRoom(room)
         }
 
-        if (users.includes(member)) {
-            return setChat(chat)
+        if (members.includes(user)) {
+            return setRoom(room)
         }
 
-        setSubscriptionChannelModal(chat)
+        setSubscriptionChannelModal(room)
     }
 
 
-    const handleChatVariant = (chatType) => {
-        if (chatType == 'STUDY') return 'danger'
-        if (chatType == 'NOTIFY') return 'warning'
-        if (chatType == 'RANDOM') return 'success'
+    const handleChatVariant = (roomType) => {
+        if (roomType == 'STUDY') return 'danger'
+        if (roomType == 'NOTIFY') return 'warning'
+        if (roomType == 'RANDOM') return 'success'
     }
 
     useEffect(() => {
@@ -38,19 +38,19 @@ const ChannelList = ({ setChat }) => {
                 return
             }
 
-            response.info.rooms.forEach(chat => {
-                chat.members.forEach(member => {
-                    if (member.role == 'HOST' && member.id == userId) {
-                        chat.host = true
+            response.info.rooms.forEach(room => {
+                room.members.forEach(member => {
+                    if (member.role == 'HOST' && member.userId == userId) {
+                        room.host = true
                     }
 
-                    else if (member.role == 'MEMBER' && member.id == userId) {
-                        chat.member = true
+                    else if (member.role == 'MEMBER' && member.userId == userId) {
+                        room.member = true
                     }
                 })
             })
 
-            setChats(response.info.rooms)
+            setRooms(response.info.rooms)
 
 
         })
@@ -63,27 +63,25 @@ const ChannelList = ({ setChat }) => {
             <Card style={{ boxShadow: '0 0 2px rgba(0, 0, 0, 1)', minHeight: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <Container className='mt-3'>
                     <ListGroup>
-                        {chats && chats.length != 0 && chats.map((chat, index) => (
-                            <ListGroupItem key={index} className={`mb-3 d-flex justify-content-between align-items-start mb-1 p-3 ${styles.channelListItem}`} onClick={() => handleChat(chat)} variant={handleChatVariant(chat.type)} style={{cursor: 'pointer'}}>
+                        {rooms && rooms.length != 0 && rooms.map((room, index) => (
+                            <ListGroupItem 
+                                key={index} 
+                                className={`mb-3 d-flex justify-content-between align-items-start mb-1 p-3 ${styles.channelListItem}`} 
+                                onClick={() => handleChat(room)} 
+                                variant={handleChatVariant(room.type)} 
+                                style={{cursor: 'pointer'}}>
+
                                 <div className="ms-2 me-auto">
                                     <div>
-                                        {chat.type === 'STUDY' && <strong>  📚  {chat.name} </strong>}
-                                        {chat.type === 'NOTIFY' && <strong> 🔔 {chat.name} </strong>}
-                                        {chat.type === 'RANDOM' && <strong> 👽 {chat.name} </strong>}
+                                        {room.type === 'STUDY' && <strong>  📚  {room.name} </strong>}
+                                        {room.type === 'NOTIFY' && <strong> 🔔 {room.name} </strong>}
+                                        {room.type === 'RANDOM' && <strong> 👽 {room.name} </strong>}
                                     </div>
-                                    <span className='text-muted' style={{ fontSize: '14px' }}> {chat.description} </span>
+                                    <span className='text-muted' style={{ fontSize: '14px' }}> {room.description} </span>
                                 </div>
 
-                                {chat.host === true && 
-                                    <Badge bg={handleChatVariant(chat.type)} pill>
-                                        HOST
-                                    </Badge>
-                                }
-                                {chat.member === true && 
-                                    <Badge bg={handleChatVariant(chat.type)} pill>
-                                        MEMBER
-                                    </Badge>
-                                }
+                                { room.host === true &&   <Badge bg={handleChatVariant(room.type)} pill> HOST </Badge>  }
+                                { room.member === true && <Badge bg={handleChatVariant(room.type)} pill> MEMBER</Badge> }
                                 
                             </ListGroupItem>
                         ))}

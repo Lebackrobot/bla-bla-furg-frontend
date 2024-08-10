@@ -3,24 +3,23 @@ import { Button, Card, CardBody, CardFooter, CardHeader, Col, Container, Form, I
 import Message from "../Message/Message";
 import { useForm } from "react-hook-form";
 import messageController from "../../controllers/messageController";
-import { urlBase } from "../../configs/axiosConfig";
 import moment from "moment";
 import signController from "../../controllers/signinController";
+import { setSubscriptionChannelModal } from "../Modals/SubscriptionChannelModal";
 
-
-const Chat = ({ chat, eventSource }) => {
+const Chat = ({ room, eventSource }) => {
     const messageForm = useForm()
     const [messages, setMessages] = useState([])
 
     useEffect(() => {
-        loadChat()
-    }, [chat])
+        loadRoom()
+    }, [room])
 
-    const loadChat = () => {
+    const loadRoom = () => {
         const userId = parseInt(window.localStorage.getItem('userId'))
 
-        if (chat) {
-            messageController.getChatMessages(chat.id).then(response => {
+        if (room) {
+            messageController.getChatMessages(room.id).then(response => {
                 if (response.success === false) {
                     return
                 }
@@ -28,27 +27,30 @@ const Chat = ({ chat, eventSource }) => {
                 const messages = response.info.messages
 
                 messages.forEach(message => {
-                    if (message.user_id === userId) {
+                    if (message.userId === userId) {
                         message.sender = 'me'
                     }
 
                     else {
                         signController.makeAvatarV2(message.user.avatar).then(response => {
                             const blob = new Blob([response], { type: 'image/svg+xml' })
-                            message.avatar = URL.createObjectURL(blob)
+                            message.blob = URL.createObjectURL(blob)
                         })
                     }
-
                 })
+                
 
-                setMessages(messages)
+                setTimeout(() => {
+                    setMessages(messages)
+                }, 500)
+
             })
 
-            eventSource.onmessage = (event) => {
-                const { chatId } = JSON.parse(event.data)
+           /*  eventSource.onmessage = (event) => {
+                const { roomId } = JSON.parse(event.data)
 
-                if (chat && chat.id == chatId) {
-                    messageController.getChatMessages(chat.id).then(response => {
+                if (room && room.id == roomId) {
+                    messageController.getChatMessages(room.id).then(response => {
                         if (response.success === false) {
                             return
                         }
@@ -80,7 +82,7 @@ const Chat = ({ chat, eventSource }) => {
 
             eventSource.onerror = (error) => {
                 console.error(`SSE ERROR: ${error.message}`)
-            }
+            } */
         }
     }
 
@@ -92,7 +94,7 @@ const Chat = ({ chat, eventSource }) => {
             messageForm.setValue('message', '')
 
             messageController.create({
-                chatId: chat.id,
+                roomId: room.id,
                 content: message
             })
         }
@@ -108,18 +110,18 @@ const Chat = ({ chat, eventSource }) => {
     return (
         <Card style={{ boxShadow: '0 0 2px rgba(0, 0, 0, 1)' }}>
 
-            { chat &&
+            { room &&
                 <CardHeader className='p-3' style={{ backgroundColor: '#212529', borderRadius: '5px', color: 'white'}}>
                     <h3> 
                         <img src='./images/bla-bla-icon.png' width={35}></img> &nbsp;&nbsp;
-                        {chat.title}
+                        {room.title}
                     </h3>
                 </CardHeader>
             }
             
             <CardBody>
                 <div style={{ position: "relative", height: "500px" }}>
-                    {!chat &&
+                    {!room &&
                         <Container fluid className="h-100 d-flex justify-content-center align-items-center" style={{ height: '100%' }}>
                             <Row>
                                 <Col>
@@ -133,7 +135,7 @@ const Chat = ({ chat, eventSource }) => {
                         </Container>
                     }
 
-                    {chat &&
+                    {room &&
                         <Container style={{ height: '100%', maxHeight: 'calc(100% - 0px)', overflowY: 'auto' }}>
                             <Container style={{ display: 'flex', flexDirection: 'column-reverse' }}>
                                 {messages.map((msg, index) => (
@@ -145,7 +147,7 @@ const Chat = ({ chat, eventSource }) => {
                 </div>
             </CardBody>
 
-            { chat && <CardFooter>
+            {room && <CardFooter>
                 <InputGroup className="mb-3">
                     <Form.Control {...messageForm.register('message')}
                         placeholder=""

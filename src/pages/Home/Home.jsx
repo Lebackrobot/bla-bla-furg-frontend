@@ -12,7 +12,7 @@ const Home = () => {
     
 
     const [chat, setChat] = useState()
-    //const [eventSource, setEventSource] = useState(new EventSource(`${urlBase}/auth/event-stream?token=${window.localStorage.getItem('token')}`))
+    const [eventSource, setEventSource] = useState(new EventSource(`${urlBase}/auth/event-stream?token=${window.localStorage.getItem('token')}`))
 
     const handleLogout = () => {
         window.localStorage.removeItem('token')
@@ -36,11 +36,11 @@ const Home = () => {
             <HomeContainer>
                 <Row>
                     <Col xs={3}>
-                        <ChannelList setChat={setChat}></ChannelList>
+                        <ChannelList setRoom={setChat}></ChannelList>
                     </Col>
 
                     <Col>
-                        {/* <Chat chat={chat} eventSource={eventSource}></Chat> */}
+                        <Chat room={chat} eventSource={eventSource}></Chat>
                     </Col>
 
                 </Row>
