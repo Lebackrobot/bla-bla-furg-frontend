@@ -1,28 +1,28 @@
 import axios from 'axios'
-import { urlBase, headers } from '../configs/axiosConfig'
-import messageControllerBackup from './messageControllerBackup'
+import { urlBaseBackup, headers } from '../configs/axiosConfig'
 
-const messageController = {
+const messageControllerBackup = {
     create: async (payload) => {
         try {
-            const url = `${urlBase}/auth/messages`
+            const url = `${urlBaseBackup}/auth/messages`
             const response = await axios.post(url, payload, {
                 headers: {
                     ...headers,
-                    authorization: window.localStorage.getItem('token') 
+                    authorization: window.localStorage.getItem('token')
                 }
             })
             return response.data
         }
 
         catch (error) {
-            return messageControllerBackup.create(payload)
+            console.error(error)
+            return error.response.data
         }
     },
 
     getChatMessages: async (chatId) => {
         try {
-            const response = await axios.get(`${urlBase}/auth/messages/${chatId}`, {
+            const response = await axios.get(`${urlBaseBackup}/auth/messages/${chatId}`, {
                 headers: {
                     ...headers,
                     authorization: window.localStorage.getItem('token')
@@ -33,9 +33,10 @@ const messageController = {
         }
 
         catch (error) {
-            return messageControllerBackup.getChatMessages(chatId)
+            console.error(error)
+            return error.response.data
         }
     }
 }
 
-export default messageController
+export default messageControllerBackup
