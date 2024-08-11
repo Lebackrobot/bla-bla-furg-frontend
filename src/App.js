@@ -6,13 +6,15 @@ import Signin from './pages/signin/Signin'
 import Signup from './pages/signin/signup/Signup';
 import Home from './pages/Home/Home';
 import NotFound from './pages/NotFound/NotFound';
-import { useEffect } from 'react';
+import React from 'react';
 
 const App = () => {
 
-  useEffect(() => {
-    if (window.location.pathname === '/') {
-      window.location = '/signin'
+  React.useEffect(() => {
+    let token = localStorage.getItem('token')
+
+    if (!token && !['/signin', '/signup'].includes(window.location.pathname)) {
+      window.location.href = '/signin'
     }
   }, [])
 
@@ -23,6 +25,7 @@ const App = () => {
         <Route path='/signin' element={<Signin></Signin>}></Route>
         <Route path='/signup' element={<Signup></Signup>}></Route>
         <Route path='/home'   element={<Home></Home>}></Route>
+        <Route path='/' element={<Home></Home>}></Route>
         <Route path='*' element={<NotFound></NotFound>}></Route>
       </Routes>
     </Router>
