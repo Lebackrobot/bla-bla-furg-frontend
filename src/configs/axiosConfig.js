@@ -1,5 +1,5 @@
-const urlBase = 'http://localhost:4000'
-const eventStreamUrlBase = 'http://localhost:4000'
+const urlBase = 'https://bla-bla-furg-backend.onrender.com'
+const eventStreamUrlBase = 'https://bla-bla-furg-backend.onrender.com'
 const headers = { 
     'Content-Type': 'application/json', 
     'Authorization': `${window.localStorage.getItem('token')}`
