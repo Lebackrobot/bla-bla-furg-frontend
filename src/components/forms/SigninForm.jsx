@@ -18,6 +18,7 @@ const SigninForm = () => {
 
             window.localStorage.setItem('token', response.info.token)
             window.localStorage.setItem('userId', response.info.userId)
+            window.localStorage.setItem('nickname', signupForm.getValues('nickname'))
 
             window.location.href = '/home'
         })
@@ -29,7 +30,7 @@ const SigninForm = () => {
             <Form className='my-5 mx-1' onSubmit={handleSubmit}>
 
                 <InputGroup className='mb-3'>
-                    <Form.Control type='email' placeholder='Email' {...signupForm.register('email')}></Form.Control>
+                    <Form.Control type='text' placeholder='Nickname' {...signupForm.register('nickname')}></Form.Control>
                 </InputGroup>
 
                 <InputGroup className='mb-3'>

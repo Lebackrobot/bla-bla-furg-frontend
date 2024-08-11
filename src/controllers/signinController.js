@@ -33,11 +33,14 @@ const signController = {
 
     makeAvatar: async () => {
         try {
-            const url = `${urlBase}/noauth/signup/make-avatar`
-            const response = await axios.get(url)
+            const seedResponse = await axios.get(`${urlBase}/noauth/picture-seed`)
+            const avatarResponse = await axios.get(`https://api.dicebear.com/9.x/adventurer/svg?seed=${seedResponse.data.info.seed}`)
 
-            return response.data
 
+            const seed = seedResponse.data.info.seed
+            const avatar = avatarResponse.data
+
+            return { success: true, info: { seed, avatar }}
         }
 
         catch (error) {
@@ -51,7 +54,6 @@ const signController = {
         try {
             const url = `https://api.dicebear.com/9.x/adventurer/svg?seed=${seed}`
             const response = await axios.get(url)
-            
             return response.data
         }
 

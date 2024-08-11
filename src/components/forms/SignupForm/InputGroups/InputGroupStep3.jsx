@@ -13,6 +13,7 @@ const InputGroupStep3 = ({ signupForm }) => {
 
             window.localStorage.setItem('token', response.info.token)
             window.localStorage.setItem('userId', response.info.userId)
+            window.localStorage.setItem('nickname', signupForm.getValues('nickname'))
 
 
             setTimeout(() => {
