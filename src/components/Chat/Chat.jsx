@@ -5,14 +5,30 @@ import { useForm } from "react-hook-form";
 import messageController from "../../controllers/messageController";
 import moment from "moment";
 import signController from "../../controllers/signinController";
-import { setSubscriptionChannelModal } from "../Modals/SubscriptionChannelModal";
 
 const Chat = ({ room, eventSource }) => {
     const messageForm = useForm()
     const [messages, setMessages] = useState([])
 
     useEffect(() => {
+        eventSource.onmessage = (event) => {
+            const { roomId } = JSON.parse(event.data)
+
+            if (room && room.id == roomId) {
+               loadRoom()
+            }
+        }
+
+        eventSource.onopen = () => {
+            console.log(`Connected to server SSE. Waiting for messages...`);
+        }
+
+        eventSource.onerror = (error) => {
+            console.error(`SSE ERROR: ${error.message}`)
+        }
+
         loadRoom()
+        
     }, [room])
 
     const loadRoom = () => {
@@ -31,12 +47,11 @@ const Chat = ({ room, eventSource }) => {
                         message.sender = 'me'
                     }
 
-                    else {
-                        signController.makeAvatarV2(message.user.avatar).then(response => {
-                            const blob = new Blob([response], { type: 'image/svg+xml' })
-                            message.blob = URL.createObjectURL(blob)
-                        })
-                    }
+
+                    signController.makeAvatarV2(message.user.avatar).then(response => {
+                        const blob = new Blob([response], { type: 'image/svg+xml' })
+                        message.blob = URL.createObjectURL(blob)
+                    })
                 })
                 
 
@@ -45,45 +60,7 @@ const Chat = ({ room, eventSource }) => {
                 }, 500)
 
             })
-
-           /*  eventSource.onmessage = (event) => {
-                const { roomId } = JSON.parse(event.data)
-
-                if (room && room.id == roomId) {
-                    messageController.getChatMessages(room.id).then(response => {
-                        if (response.success === false) {
-                            return
-                        }
-
-                        const messages = response.info.messages
-
-                        messages.forEach(message => {
-                            if (message.user_id === userId) {
-                                message.sender = 'me'
-                            }
-
-                            else {
-                                signController.makeAvatarV2(message.user.avatar).then(response => {
-                                    const blob = new Blob([response], { type: 'image/svg+xml' })
-                                    message.avatar = URL.createObjectURL(blob)
-                                })
-
-                            }
-                        })
-
-                        setMessages(messages)
-                    })
-                }
-            }
-
-            eventSource.onopen = () => {
-                console.log(`Connected to server SSE. Waiting for messages...`);
-            }
-
-            eventSource.onerror = (error) => {
-                console.error(`SSE ERROR: ${error.message}`)
-            } */
-        }
+       }
     }
 
     const handleMessage = () => {
@@ -97,6 +74,8 @@ const Chat = ({ room, eventSource }) => {
                 roomId: room.id,
                 content: message
             })
+
+            setTimeout(() => { loadRoom() }, 500)
         }
     }
 
@@ -114,7 +93,7 @@ const Chat = ({ room, eventSource }) => {
                 <CardHeader className='p-3' style={{ backgroundColor: '#212529', borderRadius: '5px', color: 'white'}}>
                     <h3> 
                         <img src='./images/bla-bla-icon.png' width={35}></img> &nbsp;&nbsp;
-                        {room.title}
+                        {room.name}
                     </h3>
                 </CardHeader>
             }

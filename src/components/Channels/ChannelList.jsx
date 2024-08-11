@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Badge, Button, Card, Col, Container, ListGroup, ListGroupItem, Row } from "react-bootstrap"
 import chatController from "../../controllers/chatController"
 import { setSubscriptionChannelModal, SubscriptionChannelModal } from "../Modals/SubscriptionChannelModal"
+import { ChannelModal, setChannelModal } from "../Modals/ChannelModal"
 
 import styles from './ChannelList.module.css'
 
@@ -26,7 +27,7 @@ const ChannelList = ({ setRoom }) => {
 
     const handleChatVariant = (roomType) => {
         if (roomType == 'STUDY') return 'danger'
-        if (roomType == 'NOTIFY') return 'warning'
+        if (roomType == 'REMINDER') return 'warning'
         if (roomType == 'RANDOM') return 'success'
     }
 
@@ -58,6 +59,7 @@ const ChannelList = ({ setRoom }) => {
 
     return (
         <>
+            <ChannelModal></ChannelModal>
             <SubscriptionChannelModal></SubscriptionChannelModal>
 
             <Card style={{ boxShadow: '0 0 2px rgba(0, 0, 0, 1)', minHeight: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
@@ -73,9 +75,9 @@ const ChannelList = ({ setRoom }) => {
 
                                 <div className="ms-2 me-auto">
                                     <div>
-                                        {room.type === 'STUDY' && <strong>  📚  {room.name} </strong>}
-                                        {room.type === 'NOTIFY' && <strong> 🔔 {room.name} </strong>}
-                                        {room.type === 'RANDOM' && <strong> 👽 {room.name} </strong>}
+                                        {room.type === 'STUDY' && <strong>  📚  {room.name} {room.visibility === 'PRIVATE' && <>(🔒)</>}</strong>}
+                                        {room.type === 'REMINDER' && <strong> 🔔 {room.name} {room.visibility === 'PRIVATE' && <>(🔒)</>}</strong>}
+                                        {room.type === 'RANDOM' && <strong> 👽 {room.name} {room.visibility === 'PRIVATE' && <>(🔒)</>} </strong>}
                                     </div>
                                     <span className='text-muted' style={{ fontSize: '14px' }}> {room.description} </span>
                                 </div>
@@ -88,7 +90,7 @@ const ChannelList = ({ setRoom }) => {
                     </ListGroup>
                 </Container>
 
-                <Button variant='dark' className='mx-1 my-2 px-2'>
+                <Button variant='dark' className='mx-1 my-2 px-2' onClick={() => setChannelModal(true)}>
                     💬 Criar Canal
                 </Button>
             </Card>

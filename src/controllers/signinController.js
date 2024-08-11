@@ -54,7 +54,6 @@ const signController = {
         try {
             const url = `https://api.dicebear.com/9.x/adventurer/svg?seed=${seed}`
             const response = await axios.get(url)
-            
             return response.data
         }
 
