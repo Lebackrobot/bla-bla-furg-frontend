@@ -5,13 +5,14 @@ import ChannelList from "../../components/Channels/ChannelList"
 import { useNavigate } from "react-router-dom"
 import Chat from "../../components/Chat/Chat"
 import { useEffect, useState } from "react"
-import { eventStreamUrlBase, urlBase } from "../../configs/axiosConfig"
+import { eventStreamUrlBase, eventStreamUrlBackup } from "../../configs/axiosConfig"
 
 const Home = () => {
     const navigate = useNavigate()
     
     const [chat, setChat] = useState()
     const [eventSource, setEventSource] = useState(new EventSource(`${eventStreamUrlBase}/auth/event-stream?token=${localStorage.getItem('token')}`))
+    const [eventSourceBackup, setEventSourceBackup] = useState(new EventSource(`${eventStreamUrlBackup}/auth/event-stream?token=${localStorage.getItem('token')}`))
 
     const handleLogout = () => {
         window.localStorage.removeItem('token')
@@ -38,7 +39,7 @@ const Home = () => {
                     </Col>
 
                     <Col>
-                        <Chat room={chat} eventSource={eventSource}></Chat>
+                        <Chat room={chat} eventSource={eventSource} eventSourceBackup={eventSourceBackup} setEventSource={setEventSource}></Chat>
                     </Col>
 
                 </Row>
