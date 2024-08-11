@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { headers, urlBase } from '../configs/axiosConfig'
+import userControllerBackup from './userControllerBackup'
 
 const userController = {
     getByNickname: async (nickname) => {
@@ -11,8 +12,7 @@ const userController = {
         }
 
         catch (error) {
-            console.error(error)
-            return error.response.data
+            return userControllerBackup.getByNickname(nickname)
         }
     }
 }

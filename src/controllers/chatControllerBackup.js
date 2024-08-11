@@ -1,24 +1,26 @@
 import axios from 'axios'
-import { urlBase, urlBaseBackup, headers } from '../configs/axiosConfig'
-import chatControllerBackup from './chatControllerBackup'
+import { urlBaseBackup, headers } from '../configs/axiosConfig'
 
-const chatController = {
+const chatControllerBackup = {
     get: async () => {
         try {
-            const url = `${urlBase}/noauth/rooms`
+            const url = `${urlBaseBackup}/noauth/rooms`
             const response = await axios.get(url)
             return response.data
+
         }
 
         catch (error) {
-            return chatControllerBackup.get()
+            console.error(error)
+            return error.response.data
+
         }
     },
 
 
     addMember: async (payload) => {
         try {
-            const url = `${urlBase}/auth/rooms/member`
+            const url = `${urlBaseBackup}/auth/rooms/member`
             const response = await axios.post(url, payload, {
                 headers: {
                     ...headers,
@@ -29,13 +31,14 @@ const chatController = {
         }
 
         catch (error) {
-            return chatControllerBackup.addMember(payload)
+            console.error(error)
+            return error.response.data
         }
     },
 
     create: async (payload) => {
         try {
-            const url = `${urlBase}/auth/rooms`
+            const url = `${urlBaseBackup}/auth/rooms`
             const response = await axios.post(url, payload, {
                 headers: {
                     ...headers,
@@ -46,9 +49,10 @@ const chatController = {
         }
 
         catch (error) {
-            return chatControllerBackup.create(payload)
+            console.error(error)
+            return error.response.data
         }
     }
 }
 
-export default chatController
+export default chatControllerBackup

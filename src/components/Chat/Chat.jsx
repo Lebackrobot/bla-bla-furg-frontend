@@ -6,11 +6,14 @@ import messageController from "../../controllers/messageController";
 import moment from "moment";
 import signController from "../../controllers/signinController";
 
-const Chat = ({ room, eventSource }) => {
+const Chat = ({ room, eventSource, eventSourceBackup, setEventSource }) => {
     const messageForm = useForm()
     const [messages, setMessages] = useState([])
 
     useEffect(() => {
+        console.log(eventSource)
+        console.log(eventSourceBackup)
+
         eventSource.onmessage = (event) => {
             const { roomId } = JSON.parse(event.data)
 
@@ -24,6 +27,23 @@ const Chat = ({ room, eventSource }) => {
         }
 
         eventSource.onerror = (error) => {
+            console.error(`SSE ERROR: ${error.message}`)
+        }
+
+        eventSourceBackup.onmessage = (event) => {
+            const { roomId } = JSON.parse(event.data)
+
+            if (room && room.id == roomId) {
+               loadRoom()
+            }
+        }
+        
+
+        eventSourceBackup.onopen = () => {
+            console.log(`Connected to server SSE. Waiting for messages...`);
+        }
+
+        eventSourceBackup.onerror = (error) => {
             console.error(`SSE ERROR: ${error.message}`)
         }
 
