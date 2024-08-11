@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form"
 import signController from "../../controllers/signinController"
 import { ToastError, handleToastError } from "../toasts/ToastError"
 import { useNavigate } from "react-router-dom"
+import { Load, handleLoad } from "../Load/Load"
 
 const SigninForm = () => {
     const navigate = useNavigate()
@@ -10,6 +11,8 @@ const SigninForm = () => {
 
     const handleSubmit = (ev) => {
         ev.preventDefault()
+        handleLoad()
+
         signController.signin(signupForm.getValues()).then(response => {
             if (response.success === false) {
                 handleToastError(response.message)
@@ -26,6 +29,7 @@ const SigninForm = () => {
 
     return (
         <>
+            <Load></Load>
             <ToastError></ToastError>
             <Form className='my-5 mx-1' onSubmit={handleSubmit}>
 

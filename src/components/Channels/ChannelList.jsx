@@ -5,6 +5,7 @@ import { setSubscriptionChannelModal, SubscriptionChannelModal } from "../Modals
 import { ChannelModal, setChannelModal } from "../Modals/ChannelModal"
 
 import styles from './ChannelList.module.css'
+import { Load, handleLoad } from "../Load/Load"
 
 const ChannelList = ({ setRoom }) => {
     const [rooms, setRooms] = useState()
@@ -33,6 +34,7 @@ const ChannelList = ({ setRoom }) => {
 
     useEffect(() => {
         const userId = window.localStorage.getItem('userId')
+        handleLoad()
 
         chatController.get().then(response => {
             if (response.success === false) {
@@ -59,6 +61,7 @@ const ChannelList = ({ setRoom }) => {
 
     return (
         <>
+            <Load></Load>
             <ChannelModal></ChannelModal>
             <SubscriptionChannelModal></SubscriptionChannelModal>
 

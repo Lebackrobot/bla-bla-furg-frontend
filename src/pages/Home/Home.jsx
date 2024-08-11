@@ -10,7 +10,6 @@ import { eventStreamUrlBase, urlBase } from "../../configs/axiosConfig"
 const Home = () => {
     const navigate = useNavigate()
     
-
     const [chat, setChat] = useState()
     const [eventSource, setEventSource] = useState(new EventSource(`${eventStreamUrlBase}/auth/event-stream?token=${localStorage.getItem('token')}`))
 
@@ -18,7 +17,6 @@ const Home = () => {
         window.localStorage.removeItem('token')
         navigate('/signin')
     }
-
     
     return (
         <> 
