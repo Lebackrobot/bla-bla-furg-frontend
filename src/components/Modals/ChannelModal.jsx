@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form"
 import chatController from "../../controllers/chatController"
 import { ToastError, handleToastError } from '../toasts/ToastError' 
 
+import { Load, handleLoad } from './../Load/Load'
+
 let setChannelModal
 
  
@@ -13,16 +15,25 @@ const ChannelModal = () => {
     const [ submitDisabled, setSubmitDisabled] = useState(true)
 
     const handleSubmit = () => {
-        const payload = channelForm.getValues()
+        handleLoad(true)
 
-        chatController.create(payload).then(response => {
-            if (response.success === false) {
-                handleToastError(response.message)
-                return
-            }
+        try {
+            const payload = channelForm.getValues()
+    
+            chatController.create(payload).then(response => {
+                if (response.success === false) {
+                    handleToastError(response.message)
+                    return
+                }
+    
+                window.location.reload()
+            })
+        }
 
-            window.location.reload()
-        })
+        finally {
+            handleLoad(false)
+        }
+
 
     }
 
@@ -60,6 +71,7 @@ const ChannelModal = () => {
 
     return (
         <>
+            <Load></Load>
             <ToastError></ToastError>
             <Modal show={show}>
                 <Modal.Header>

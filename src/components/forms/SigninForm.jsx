@@ -11,19 +11,27 @@ const SigninForm = () => {
 
     const handleSubmit = (ev) => {
         ev.preventDefault()
-        handleLoad()
+        handleLoad(true)
 
         signController.signin(signupForm.getValues()).then(response => {
-            if (response.success === false) {
-                handleToastError(response.message)
-                return
+            try {
+                if (response.success === false) {
+                    handleToastError(response.message)
+                    handleLoad(false)
+                    return
+                }
+    
+                window.localStorage.setItem('token', response.info.token)
+                window.localStorage.setItem('userId', response.info.userId)
+                window.localStorage.setItem('nickname', signupForm.getValues('nickname'))
+    
+                window.location.href = '/home'
+
             }
 
-            window.localStorage.setItem('token', response.info.token)
-            window.localStorage.setItem('userId', response.info.userId)
-            window.localStorage.setItem('nickname', signupForm.getValues('nickname'))
-
-            window.location.href = '/home'
+            finally {
+                handleLoad(false)
+            }
         })
     }
 

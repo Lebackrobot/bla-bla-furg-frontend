@@ -33,29 +33,34 @@ const ChannelList = ({ setRoom }) => {
     }
 
     useEffect(() => {
+        handleLoad(true)
+
         const userId = window.localStorage.getItem('userId')
-        handleLoad()
 
         chatController.get().then(response => {
-            if (response.success === false) {
-                return
+            try {
+                if (response.success === false) {
+                    return
+                }
+    
+                response.info.rooms.forEach(room => {
+                    room.members.forEach(member => {
+                        if (member.role == 'HOST' && member.userId == userId) {
+                            room.host = true
+                        }
+    
+                        else if (member.role == 'MEMBER' && member.userId == userId) {
+                            room.member = true
+                        }
+                    })
+                })
+    
+                setRooms(response.info.rooms)
             }
 
-            response.info.rooms.forEach(room => {
-                room.members.forEach(member => {
-                    if (member.role == 'HOST' && member.userId == userId) {
-                        room.host = true
-                    }
-
-                    else if (member.role == 'MEMBER' && member.userId == userId) {
-                        room.member = true
-                    }
-                })
-            })
-
-            setRooms(response.info.rooms)
-
-
+            finally {
+                handleLoad(false)
+            }
         })
     }, [])
 

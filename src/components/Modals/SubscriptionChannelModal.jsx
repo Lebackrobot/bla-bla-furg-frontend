@@ -3,6 +3,7 @@ import { Button, Form, InputGroup, Modal } from "react-bootstrap"
 import chatController from "../../controllers/chatController"
 import { useForm } from "react-hook-form"
 import { ToastError, handleToastError } from "../toasts/ToastError"
+import { Load, handleLoad } from "../Load/Load"
 
 let setSubscriptionChannelModal
 
@@ -20,20 +21,25 @@ const SubscriptionChannelModal = () => {
     const handleClose = () => setShow(false)
 
     const handleChannelRegister = () => {
+        handleLoad(true)
 
-        const payload = subscriptionChannelForm.getValues()
+        try {
+            const payload = subscriptionChannelForm.getValues()
+    
+            chatController.addMember({ roomId: chat.id, ...payload}).then(response => {
+                if (response.success === false) {
+                    handleToastError(response.message)
+                    return 
+                }
+    
+                window.location.reload()    
+                handleClose()
+            })
+        }
 
-        chatController.addMember({ roomId: chat.id, ...payload}).then(response => {
-            if (response.success === false) {
-                handleToastError(response.message)
-                return 
-            }
-
-            window.location.reload()    
-            handleClose()
-        })
-        
-
+        finally {
+            handleLoad(false)
+        }
     }
 
     setSubscriptionChannelModal = handleSubscritionChannelModal 
@@ -41,6 +47,7 @@ const SubscriptionChannelModal = () => {
 
     return (
         <>
+            <Load></Load>
             <ToastError></ToastError>
             {chat &&
                 <Modal show={show}>

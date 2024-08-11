@@ -6,12 +6,8 @@ let handleLoad
 const Load = () => {
     const [show, setLoad] = useState(false)
 
-    const handleShow = () => {
-        setLoad(true)
-    
-        setTimeout(() => {
-            setLoad(false)
-        }, 3000)
+    const handleShow = (value) => {
+        setLoad(value)
     }
 
     handleLoad = handleShow
