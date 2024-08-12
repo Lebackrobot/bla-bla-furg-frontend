@@ -41,7 +41,7 @@ const signController = {
         }
 
         catch (error) {
-            signControllerBackup.makeAvatar()
+            return signControllerBackup.makeAvatar()
         }
     },
 
